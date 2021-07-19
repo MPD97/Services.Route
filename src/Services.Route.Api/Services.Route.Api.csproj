@@ -10,5 +10,10 @@
         <PackageReference Include="Convey.WebApi.CQRS" Version="0.5.452" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Services.Route.Application\Services.Route.Application.csproj" />
+      <ProjectReference Include="..\Services.Route.Infrastrucute\Services.Route.Infrastrucute.csproj" />
+    </ItemGroup>
     
 </Project>
