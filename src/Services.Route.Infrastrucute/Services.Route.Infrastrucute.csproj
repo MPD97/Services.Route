@@ -28,4 +28,8 @@
         <PackageReference Include="Convey.WebApi.Swagger" Version="0.5.452" />
     </ItemGroup>
     
+    <ItemGroup>
+      <ProjectReference Include="..\Services.Route.Application\Services.Route.Application.csproj" />
+    </ItemGroup>
+    
 </Project>
