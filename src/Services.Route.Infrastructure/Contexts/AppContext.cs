@@ -1,7 +1,7 @@
 ﻿using System;
 using Services.Route.Application;
 
-namespace Services.Route.Infrastrucute.Contexts
+namespace Services.Route.Infrastructure.Contexts
 {
     internal class AppContext : IAppContext
     {

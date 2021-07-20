@@ -1,6 +1,6 @@
 using Services.Route.Application;
 
-namespace Services.Route.Infrastrucute
+namespace Services.Route.Infrastructure
 {
     public interface IAppContextFactory
     {

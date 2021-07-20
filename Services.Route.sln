@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Route.Core", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Route.Application", "src\Services.Route.Application\Services.Route.Application.csproj", "{2689CA6A-48BC-4032-A948-A795BF62F61A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Route.Infrastrucute", "src\Services.Route.Infrastrucute\Services.Route.Infrastrucute.csproj", "{F1A1D5DB-4715-424A-9EB6-EAD945EFF422}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Route.Infrastructure", "src\Services.Route.Infrastructure\Services.Route.Infrastructure.csproj", "{F1A1D5DB-4715-424A-9EB6-EAD945EFF422}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Route.Tests.Unit", "tests\Services.Route.Tests.Unit\Services.Route.Tests.Unit.csproj", "{60D996AC-6CD2-483C-B032-C917375353CE}"
 EndProject

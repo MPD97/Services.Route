@@ -6,7 +6,7 @@ namespace Services.Route.Application.DTO
 {
     public class RouteDto
     {
-        public Guid RouteId { get; set; }
+        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -19,9 +19,9 @@ namespace Services.Route.Application.DTO
             
         }
 
-        public RouteDto(Guid routeId, Guid userId, string name, string description, string difficulty, ActivityKind activityKind, IEnumerable<PointDto> points)
+        public RouteDto(Guid id, Guid userId, string name, string description, string difficulty, ActivityKind activityKind, IEnumerable<PointDto> points)
         {
-            RouteId = routeId;
+            Id = id;
             UserId = userId;
             Name = name;
             Description = description;

@@ -9,5 +9,11 @@ namespace Services.Route.Application.Events.Rejected
         public Guid UserId { get; }
         public string Reason { get; }
         public string Code { get; }
+
+        public CreateRouteRejected(string reason, string code)
+        {
+            Reason = reason;
+            Code = code;
+        }
     }
 }

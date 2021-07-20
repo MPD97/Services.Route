@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Services.Route.Application\Services.Route.Application.csproj" />
-      <ProjectReference Include="..\Services.Route.Infrastrucute\Services.Route.Infrastrucute.csproj" />
+      <ProjectReference Include="..\Services.Route.Infrastructure\Services.Route.Infrastructure.csproj" />
     </ItemGroup>
     
 </Project>

@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Convey.CQRS.Events;
+using Convey.CQRS.Commands;
 using Convey.MessageBrokers;
 using Convey.MessageBrokers.Outbox;
 using Convey.Types;
 
-namespace Services.Route.Infrastrucute.Decorators
+namespace Services.Route.Infrastructure.Decorators
 {
     [Decorator]
-    internal sealed class OutboxEventHandlerDecorator<TEvent> : IEventHandler<TEvent>
-        where TEvent : class, IEvent
+    internal sealed class OutboxCommandHandlerDecorator<TCommand> : ICommandHandler<TCommand>
+        where TCommand : class, ICommand
     {
-        private readonly IEventHandler<TEvent> _handler;
+        private readonly ICommandHandler<TCommand> _handler;
         private readonly IMessageOutbox _outbox;
         private readonly string _messageId;
         private readonly bool _enabled;
 
-        public OutboxEventHandlerDecorator(IEventHandler<TEvent> handler, IMessageOutbox outbox,
+        public OutboxCommandHandlerDecorator(ICommandHandler<TCommand> handler, IMessageOutbox outbox,
             OutboxOptions outboxOptions, IMessagePropertiesAccessor messagePropertiesAccessor)
         {
             _handler = handler;
@@ -29,9 +29,9 @@ namespace Services.Route.Infrastrucute.Decorators
                 : messageProperties.MessageId;
         }
 
-        public Task HandleAsync(TEvent @event)
+        public Task HandleAsync(TCommand command)
             => _enabled
-                ? _outbox.HandleAsync(_messageId, () => _handler.HandleAsync(@event))
-                : _handler.HandleAsync(@event);
+                ? _outbox.HandleAsync(_messageId, () => _handler.HandleAsync(command))
+                : _handler.HandleAsync(command);
     }
 }

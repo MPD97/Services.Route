@@ -5,7 +5,7 @@ using Services.Route.Application.Services;
 using Services.Route.Core;
 using Services.Route.Core.Events;
 
-namespace Services.Route.Infrastrucute.Services
+namespace Services.Route.Infrastructure.Services
 {
     public class EventMapper : IEventMapper
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Services.Route.Application.Services;
 
-namespace Services.Route.Infrastrucute.Services
+namespace Services.Route.Infrastructure.Services
 {
     public class DateTimeProvider : IDateTimeProvider
     {

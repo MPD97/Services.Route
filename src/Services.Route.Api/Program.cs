@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Route.Application;
-using Services.Route.Infrastrucute;
+using Services.Route.Infrastructure;
 
 namespace Services.Route.Api
 {
@@ -32,6 +32,7 @@ namespace Services.Route.Api
                     .UseInfrastructure()
                     .UseDispatcherEndpoints(endpoints => endpoints
                         .Get("", ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppOptions>().Name))))
+                
                 .UseLogging()
                 .UseVault();
     }

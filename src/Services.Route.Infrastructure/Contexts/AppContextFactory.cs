@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Services.Route.Application;
 
-namespace Services.Route.Infrastrucute.Contexts
+namespace Services.Route.Infrastructure.Contexts
 {
     internal sealed class AppContextFactory : IAppContextFactory
     {

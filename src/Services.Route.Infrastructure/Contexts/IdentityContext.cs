@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Services.Route.Application;
 
-namespace Services.Route.Infrastrucute.Contexts
+namespace Services.Route.Infrastructure.Contexts
 {
     internal class IdentityContext : IIdentityContext
     {

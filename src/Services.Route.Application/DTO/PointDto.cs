@@ -4,7 +4,7 @@ namespace Services.Route.Application.DTO
 {
     public class PointDto
     {
-        public Guid PointId { get; set; }
+        public Guid Id { get; set; }
         public int Order { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
@@ -15,9 +15,9 @@ namespace Services.Route.Application.DTO
             
         }
 
-        public PointDto(Guid pointId, int order, decimal latitude, decimal longitude, int radius)
+        public PointDto(Guid id, int order, decimal latitude, decimal longitude, int radius)
         {
-            PointId = pointId;
+            Id = id;
             Order = order;
             Latitude = latitude;
             Longitude = longitude;

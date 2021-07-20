@@ -14,9 +14,9 @@ namespace Services.Route.Application.Commands
         public string Description { get; }
         public string Difficulty { get; }
         public ActivityKind ActivityKind  { get; }
-        public IEnumerable<Point> Points { get; }
+        public IEnumerable<CreatePoint> Points { get; }
 
-        public CreateRoute(Guid routeId, Guid userId, string name, string description, string difficulty, ActivityKind activityKind, IEnumerable<Point> points)
+        public CreateRoute(Guid routeId, Guid userId, string name, string description, string difficulty, ActivityKind activityKind, IEnumerable<CreatePoint> points)
         {
             RouteId = routeId == Guid.Empty ? Guid.NewGuid() : routeId;
             UserId = userId;
@@ -26,7 +26,7 @@ namespace Services.Route.Application.Commands
             ActivityKind = activityKind;
             Points = points;
         }
-        public class Point
+        public class CreatePoint
         {
             public Guid PointId { get; }
             public int Order { get; }
@@ -34,7 +34,7 @@ namespace Services.Route.Application.Commands
             public decimal Longitude { get; }
             public int Radius { get; }
 
-            public Point(Guid pointId, int order, decimal latitude, decimal longitude, int radius)
+            public CreatePoint(Guid pointId, int order, decimal latitude, decimal longitude, int radius)
             {
                 PointId = pointId == Guid.Empty ? Guid.NewGuid() : pointId;
                 Order = order;

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using OpenTracing;
 using Services.Route.Application.Services;
 
-namespace Services.Route.Infrastrucute.Services
+namespace Services.Route.Infrastructure.Services
 {
     internal sealed class MessageBroker : IMessageBroker
     {
