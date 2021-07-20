@@ -1,4 +1,5 @@
 ﻿using System;
+using Services.Route.Core.Exceptions;
 
 namespace Services.Route.Core.ValueObjects
 {
@@ -10,6 +11,19 @@ namespace Services.Route.Core.ValueObjects
         public decimal Longitude { get; }
         public int Radius { get; }
 
+        public Point(Guid id, int order, decimal latitude, decimal longitude, int radius)
+        {
+            Id = id;
+            Order = order < 0 ? throw new InvalidPointOrderException(order) : order;
+            Latitude = latitude;
+            Longitude = longitude;
+            Radius = radius;
+        }
+
+        public static bool IsValidLatitude(decimal latitude)
+            => latitude is >= -90m and <= 90m;
+        public static bool IsValidLongitude(decimal longitude)
+            => longitude is >= -180m and <= 180m;
         
         public bool Equals(Point other)
         {

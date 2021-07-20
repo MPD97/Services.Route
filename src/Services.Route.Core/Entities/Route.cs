@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Services.Route.Core.Exceptions;
 using Services.Route.Core.ValueObjects;
 
@@ -8,7 +9,7 @@ namespace Services.Route.Core.Entities
     {
         private ISet<Point> _points = new HashSet<Point>();
 
-        
+        public Guid UserId { get; private set; }
         public string Name { get; private set; }
         
         public string Description { get; private set; }
@@ -27,22 +28,22 @@ namespace Services.Route.Core.Entities
             private set => _points = new HashSet<Point>(value);
         }
 
-        public Route(string name, string description, Difficulty difficulty, 
-            int length, Status status, IEnumerable<Point> points)
+        public Route(Guid id, Guid userId, string name, string description, Difficulty difficulty, 
+             Status status, IEnumerable<Point> points)
         {
+            Id = id;
             Name = IsValidName(name) ? name : throw new InvalidRouteNameException(name);
             Description = IsValidDescription(description)
                 ? description
                 : throw new InvalidRouteDescriptionException(description);
             Difficulty = difficulty;
-            Length = length;
             Status = status;
             Points = points;
         }
         
-        public Route(string name, string description, Difficulty difficulty, 
-            int length, Status status, IEnumerable<Point> points, params ActivityKind[] activityKinds)
-        : this(name, description, difficulty, length, status, points)
+        public Route(Guid id, Guid userId, string name, string description, Difficulty difficulty, 
+             Status status, IEnumerable<Point> points, params ActivityKind[] activityKinds)
+        : this(id, userId, name, description, difficulty, status, points)
         {
             AddActivityKind(activityKinds);
         }
