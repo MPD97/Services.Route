@@ -12,5 +12,9 @@
         <PackageReference Include="Convey.MessageBrokers" Version="0.5.452" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Services.Route.Core\Services.Route.Core.csproj" />
+    </ItemGroup>
     
 </Project>
