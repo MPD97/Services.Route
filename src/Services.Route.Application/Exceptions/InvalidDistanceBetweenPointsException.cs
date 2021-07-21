@@ -16,7 +16,7 @@ namespace Services.Route.Application.Exceptions
 
         public InvalidDistanceBetweenPointsException(Guid userId, Point firstPoint,
             Point secondPoint, double distance, int minDistance, int maxDistance) 
-            : base($"User with id: {userId} has given points in invalid distance: {distance}." +
+            : base($"User with id: {userId} has given points in invalid distance from each other: {distance:0.##} meters." +
                    $" Distance between points must be between {minDistance} and {maxDistance} meters.")
         {
             UserId = userId;
