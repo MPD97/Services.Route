@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Services.Route.Core.Events;
 using Services.Route.Core.Exceptions;
 using Services.Route.Core.ValueObjects;
 
@@ -7,9 +9,13 @@ namespace Services.Route.Core.Entities
 {
     public class Route: AggregateRoot
     {
+        private static readonly int _maxPossibleValue = Enum.GetValues(typeof(ActivityKind)).Cast<int>().Sum();
+        
         private ISet<Point> _points = new HashSet<Point>();
 
         public Guid UserId { get; private set; }
+        
+        public Guid? AcceptedById { get; private set; }
         public string Name { get; private set; }
         
         public string Description { get; private set; }
@@ -50,6 +56,11 @@ namespace Services.Route.Core.Entities
             AddActivityKind(activityKinds);
         }
 
+        public void Accept(Guid userId)
+        {
+            AcceptedById = userId;
+            AddEvent(new RouteAccepted(this));
+        }
         private static bool IsValidName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -84,6 +95,10 @@ namespace Services.Route.Core.Entities
         {
             foreach (var kind in kinds)
             {
+                if ((int)kind > _maxPossibleValue || (int)kind < 0)
+                {
+                    throw new InvalidRouteActivityKindException((int) kind, 0, _maxPossibleValue);
+                }
                 ActivityKind |= kind;
             }
         }
@@ -92,6 +107,10 @@ namespace Services.Route.Core.Entities
         {
             foreach (var kind in kinds)
             {
+                if ((int)kind > _maxPossibleValue || (int)kind < 0)
+                {
+                    throw new InvalidRouteActivityKindException((int) kind, 0, _maxPossibleValue);
+                }
                 ActivityKind &= ~kind;
             }
         }
