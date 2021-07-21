@@ -53,6 +53,7 @@ namespace Services.Route.Infrastructure
             builder.Services.AddTransient<IUserRepository, UserMongoRepository>();
             builder.Services.AddTransient<IRouteRepository, RouteMongoRepository>();
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            builder.Services.AddSingleton<IDistanceMeasure, DistanceMesure>();
             builder.Services.AddTransient<IAppContextFactory, AppContextFactory>();
             builder.Services.AddTransient(ctx => ctx.GetRequiredService<IAppContextFactory>().Create());
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));

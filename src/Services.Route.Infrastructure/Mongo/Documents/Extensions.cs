@@ -9,7 +9,7 @@ namespace Services.Route.Infrastructure.Mongo.Documents
     {
         public static Core.Entities.Route AsEntity(this RouteDocument document)
             => new Core.Entities.Route(document.Id, document.UserId, document.Name, document.Description,
-                document.Difficulty, document.Status, 
+                document.Difficulty, document.Status, document.Length, 
                 document.Points.Select(p => 
                     new Point(p.Id, p.Order, p.Latitude, p.Longitude, p.Radius)), document.ActivityKind);
 
@@ -42,6 +42,7 @@ namespace Services.Route.Infrastructure.Mongo.Documents
                 Name = document.Name,
                 Description = document.Description,
                 Difficulty = document.Difficulty.ToString(),
+                Length = document.Length,
                 ActivityKind = document.ActivityKind,
                 Points = document.Points.Select(p => new PointDto()
                 {
