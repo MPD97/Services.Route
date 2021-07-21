@@ -98,7 +98,7 @@ namespace Services.Route.Application.Commands.Handlers
                 difficulty, Status.New, (int)routeLength, points, command.ActivityKind);
 
             await _routeRepository.AddAsync(route);
-            await _messageBroker.PublishAsync(new RouteCreated(route));
+            await _messageBroker.PublishAsync(new RouteCreated(route.Id, route.Status.ToString()));
         }
     }
 }
