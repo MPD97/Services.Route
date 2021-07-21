@@ -39,7 +39,9 @@ namespace Services.Route.Api
                         .Get<GetRoute, RouteDto>("routes/{routeId}")
                         .Get<GetRoutes, IEnumerable<RouteDto>>("routes")
                         .Post<CreateRoute>("routes",
-                            afterDispatch: (cmd, ctx) => ctx.Response.Created($"routes/{cmd.RouteId}"))))
+                            afterDispatch: (cmd, ctx) => ctx.Response.Created($"routes/{cmd.RouteId}"))
+                        .Put<ChangeRouteStatus>("routes/{routeId}/status/{status}",
+                            afterDispatch: (cmd, ctx) => ctx.Response.NoContent())))
                 .UseLogging()
                 .UseVault();
     }
