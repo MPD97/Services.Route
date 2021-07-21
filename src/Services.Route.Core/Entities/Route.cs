@@ -29,21 +29,23 @@ namespace Services.Route.Core.Entities
         }
 
         public Route(Guid id, Guid userId, string name, string description, Difficulty difficulty, 
-             Status status, IEnumerable<Point> points)
+             Status status, int length, IEnumerable<Point> points)
         {
             Id = id;
+            UserId = userId;
             Name = IsValidName(name) ? name : throw new InvalidRouteNameException(name);
             Description = IsValidDescription(description)
                 ? description
                 : throw new InvalidRouteDescriptionException(description);
             Difficulty = difficulty;
             Status = status;
+            Length = length;
             Points = points;
         }
         
         public Route(Guid id, Guid userId, string name, string description, Difficulty difficulty, 
-             Status status, IEnumerable<Point> points, params ActivityKind[] activityKinds)
-        : this(id, userId, name, description, difficulty, status, points)
+             Status status, int length, IEnumerable<Point> points, params ActivityKind[] activityKinds)
+        : this(id, userId, name, description, difficulty, status, length, points)
         {
             AddActivityKind(activityKinds);
         }
