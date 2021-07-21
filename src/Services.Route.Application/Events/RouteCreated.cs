@@ -1,15 +1,19 @@
-﻿using Convey.CQRS.Events;
+﻿using System;
+using Convey.CQRS.Events;
 
 namespace Services.Route.Application.Events
 {
     [Contract]
     public class RouteCreated : IEvent
     {
-        public Core.Entities.Route Route { get; }
+        public Guid RouteId { get; }
+        
+        public string Status { get; }
 
-        public RouteCreated(Core.Entities.Route route)
+        public RouteCreated(Guid routeId, string status)
         {
-            Route = route;
+            RouteId = routeId;
+            Status = status;
         }
     }
 }
