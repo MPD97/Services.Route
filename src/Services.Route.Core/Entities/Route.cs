@@ -34,11 +34,12 @@ namespace Services.Route.Core.Entities
             private set => _points = new HashSet<Point>(value);
         }
 
-        public Route(Guid id, Guid userId, string name, string description, Difficulty difficulty, 
+        public Route(Guid id, Guid userId, Guid? acceptedById, string name, string description, Difficulty difficulty, 
              Status status, int length, IEnumerable<Point> points)
         {
             Id = id;
             UserId = userId;
+            AcceptedById = acceptedById;
             Name = IsValidName(name) ? name : throw new InvalidRouteNameException(name);
             Description = IsValidDescription(description)
                 ? description
@@ -49,9 +50,9 @@ namespace Services.Route.Core.Entities
             Points = points;
         }
         
-        public Route(Guid id, Guid userId, string name, string description, Difficulty difficulty, 
+        public Route(Guid id, Guid userId, Guid? acceptedById, string name, string description, Difficulty difficulty, 
              Status status, int length, IEnumerable<Point> points, params ActivityKind[] activityKinds)
-        : this(id, userId, name, description, difficulty, status, length, points)
+        : this(id, userId, acceptedById, name, description, difficulty, status, length, points)
         {
             AddActivityKind(activityKinds);
         }
@@ -62,10 +63,27 @@ namespace Services.Route.Core.Entities
                 throw new CannotAcceptRouteWithThisStatusException(Status, Status.New);
             
             AcceptedById = userId;
+            Status = Status.Accepted;
             AddEvent(new RouteAccepted(this));
         }
 
-        public void SetStatus(Status status)
+        public void Reject(Guid userId)
+        {
+            if (Status != Status.New)
+                throw new CannotRejectRouteWithThisStatusException(Status, Status.New);
+            
+            SetStatus(Status.Rejected);
+        }
+        
+        public void Remove(Guid userId)
+        {
+            if (Status != Status.Accepted)
+                throw new CannotRemoveRouteWithThisStatusException(Status, Status.Accepted);
+            
+            SetStatus(Status.Rejected);
+        }
+        
+        private void SetStatus(Status status)
         {
             var previousStatus = Status;
             Status = status;
