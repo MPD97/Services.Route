@@ -58,9 +58,20 @@ namespace Services.Route.Core.Entities
 
         public void Accept(Guid userId)
         {
+            if (Status != Status.New)
+                throw new CannotAcceptRouteWithThisStatusException(Status, Status.New);
+            
             AcceptedById = userId;
             AddEvent(new RouteAccepted(this));
         }
+
+        public void SetStatus(Status status)
+        {
+            var previousStatus = Status;
+            Status = status;
+            AddEvent(new RouteStatusChanged(this, previousStatus));
+        }
+        
         private static bool IsValidName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
