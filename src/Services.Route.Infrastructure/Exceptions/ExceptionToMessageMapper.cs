@@ -16,6 +16,7 @@ namespace Services.Route.Infrastructure.Exceptions
                 InvalidAggregateIdException ex => new CreateRouteRejected(ex.Message, ex.Code),
                 InvalidPointOrderException ex => new CreateRouteRejected(ex.Message, ex.Code),
                 InvalidRouteDescriptionException ex => new CreateRouteRejected(ex.Message, ex.Code),
+                CannotAcceptRouteWithThisStatusException ex => new CreateRouteRejected(ex.Message, ex.Code),
                 InvalidRouteNameException ex => new CreateRouteRejected(ex.Message, ex.Code),
                 RouteDescriptionTooLongException ex => new CreateRouteRejected(ex.Message, ex.Code),
                 RouteNameTooLongException ex => new CreateRouteRejected(ex.Message, ex.Code),
