@@ -11,6 +11,7 @@ namespace Services.Route.Application.DTO
         public string Name { get; set; }
         public string Description { get; set; }
         public string Difficulty { get; set; }
+        public int Length { get; set; }
         public ActivityKind ActivityKind  { get; set; }
         public IEnumerable<PointDto> Points { get; set; }
 
@@ -19,13 +20,14 @@ namespace Services.Route.Application.DTO
             
         }
 
-        public RouteDto(Guid id, Guid userId, string name, string description, string difficulty, ActivityKind activityKind, IEnumerable<PointDto> points)
+        public RouteDto(Guid id, Guid userId, string name, string description, string difficulty, int length, ActivityKind activityKind, IEnumerable<PointDto> points)
         {
             Id = id;
             UserId = userId;
             Name = name;
             Description = description;
             Difficulty = difficulty;
+            Length = length;
             ActivityKind = activityKind;
             Points = points;
         }
