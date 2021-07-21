@@ -94,7 +94,7 @@ namespace Services.Route.Application.Commands.Handlers
                 routeLength += distance;
             }
             
-            var route = new Core.Entities.Route(command.RouteId, user.Id, command.Name, command.Description,
+            var route = new Core.Entities.Route(command.RouteId, user.Id, null, command.Name, command.Description,
                 difficulty, Status.New, (int)routeLength, points, command.ActivityKind);
 
             await _routeRepository.AddAsync(route);

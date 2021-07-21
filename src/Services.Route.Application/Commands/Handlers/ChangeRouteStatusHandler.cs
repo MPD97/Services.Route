@@ -29,7 +29,7 @@ namespace Services.Route.Application.Commands.Handlers
         public async Task HandleAsync(ChangeRouteStatus command)
         {
             var identity = _appContext.Identity;
-            if (!identity.IsAuthenticated && !identity.IsAdmin)
+            if (!identity.IsAuthenticated || !identity.IsAdmin)
             {
                 throw new UnauthorizedRouteStatusChangeAccessException(command.RouteId, identity.Id);
             }
@@ -40,22 +40,33 @@ namespace Services.Route.Application.Commands.Handlers
                 throw new RouteNotFoundException(identity.Id, command.RouteId);
             }
             
-            if (!Enum.TryParse<Status>(command.Status, true, out var status))
+            if (!Enum.TryParse<Status>(command.Status, true, out var newStatus))
             {
                 throw new InvalidRouteStatusException(identity.Id, Status.Unknown);
             }
-            
-            switch (status)
+
+            switch (newStatus)
             {
                 case Status.Accepted:
                     route.Accept(identity.Id);
                     break;
+                
+                case Status.Rejected:
+                    route.Reject(identity.Id);
+                    break;
+                
+                case Status.Removed: 
+                    route.Remove(identity.Id);
+                    break;
+                
                 case Status.Unknown:
                     throw new InvalidRouteStatusException(identity.Id, Status.Unknown);
-                    
+                
+                case Status.New:
+                    throw new InvalidRouteStatusException(identity.Id, Status.New);
+                
                 default:
-                    route.SetStatus(status);
-                    break;
+                    throw new InvalidRouteStatusException(identity.Id, Status.Unknown);
             }
             
             await _routeRepository.UpdateAsync(route);
