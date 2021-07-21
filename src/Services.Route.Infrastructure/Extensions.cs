@@ -90,6 +90,7 @@ namespace Services.Route.Infrastructure
                 .UseMetrics()
                 .UseRabbitMq()
                 .SubscribeCommand<CreateRoute>()
+                .SubscribeCommand<ChangeRouteStatus>()
                 .SubscribeEvent<UserCreated>()
                 .SubscribeEvent<UserStateChanged>();
             
