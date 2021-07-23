@@ -16,6 +16,5 @@ namespace Services.Route.Core.Entities
         }
 
         public void ClearEvents() => _events.Clear();
-        
     }
 }

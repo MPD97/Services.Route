@@ -9,25 +9,17 @@ namespace Services.Route.Core.Entities
 {
     public class Route: AggregateRoot
     {
-        private static readonly int _maxPossibleValue = Enum.GetValues(typeof(ActivityKind)).Cast<int>().Sum();
+        private static readonly int MaxPossibleValue = Enum.GetValues(typeof(ActivityKind)).Cast<int>().Sum();
         
         private ISet<Point> _points = new HashSet<Point>();
-
         public Guid UserId { get; private set; }
-        
         public Guid? AcceptedById { get; private set; }
         public string Name { get; private set; }
-        
         public string Description { get; private set; }
-        
         public Difficulty Difficulty { get; private set; }
-
         public ActivityKind ActivityKind  { get; private set; }
-        
         public int Length { get; private set; }
-        
         public Status Status { get; private set; }
-
         public IEnumerable<Point> Points
         {
             get => _points;
@@ -124,9 +116,9 @@ namespace Services.Route.Core.Entities
         {
             foreach (var kind in kinds)
             {
-                if ((int)kind > _maxPossibleValue || (int)kind < 0)
+                if ((int)kind > MaxPossibleValue || (int)kind < 0)
                 {
-                    throw new InvalidRouteActivityKindException((int) kind, 0, _maxPossibleValue);
+                    throw new InvalidRouteActivityKindException((int) kind, 0, MaxPossibleValue);
                 }
                 ActivityKind |= kind;
             }
@@ -136,9 +128,9 @@ namespace Services.Route.Core.Entities
         {
             foreach (var kind in kinds)
             {
-                if ((int)kind > _maxPossibleValue || (int)kind < 0)
+                if ((int)kind > MaxPossibleValue || (int)kind < 0)
                 {
-                    throw new InvalidRouteActivityKindException((int) kind, 0, _maxPossibleValue);
+                    throw new InvalidRouteActivityKindException((int) kind, 0, MaxPossibleValue);
                 }
                 ActivityKind &= ~kind;
             }
