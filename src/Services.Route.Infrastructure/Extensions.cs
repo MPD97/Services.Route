@@ -45,7 +45,6 @@ namespace Services.Route.Infrastructure
 {
     public static class Extensions
     {
-        
         public static IConveyBuilder AddInfrastructure(this IConveyBuilder builder)
         {
             builder.Services.AddSingleton<IEventMapper, EventMapper>();
