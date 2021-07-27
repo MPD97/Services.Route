@@ -25,9 +25,11 @@ namespace Services.Route.Core.Entities
             get => _points;
             private set => _points = new HashSet<Point>(value);
         }
+        public decimal Latitude { get; private set; }
+        public decimal Longitude { get; private set; }
 
         public Route(Guid id, Guid userId, Guid? acceptedById, string name, string description, Difficulty difficulty, 
-             Status status, int length, IEnumerable<Point> points)
+             Status status, int length, IEnumerable<Point> points, decimal latitude, decimal longitude)
         {
             Id = id;
             UserId = userId;
@@ -40,15 +42,22 @@ namespace Services.Route.Core.Entities
             Status = status;
             Length = length;
             Points = points;
+            Latitude = IsValidLatitude(latitude) ? latitude : throw new InvalidLatitudeException(latitude);
+            Longitude = IsValidLongitude(longitude) ? longitude : throw new InvalidLongitudeException(longitude);
         }
         
         public Route(Guid id, Guid userId, Guid? acceptedById, string name, string description, Difficulty difficulty, 
-             Status status, int length, IEnumerable<Point> points, params ActivityKind[] activityKinds)
-        : this(id, userId, acceptedById, name, description, difficulty, status, length, points)
+             Status status, int length, IEnumerable<Point> points, decimal latitude, decimal longitude, params ActivityKind[] activityKinds)
+        : this(id, userId, acceptedById, name, description, difficulty, status, length, points, latitude, longitude)
         {
             AddActivityKind(activityKinds);
         }
-
+        
+        public static bool IsValidLatitude(decimal latitude)
+            => latitude is >= -90m and <= 90m;
+        public static bool IsValidLongitude(decimal longitude)
+            => longitude is >= -180m and <= 180m;
+        
         public void Accept(Guid userId)
         {
             if (Status != Status.New)
