@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Services.Route.Application.DTO;
 using Services.Route.Core.Entities;
@@ -11,7 +12,7 @@ namespace Services.Route.Infrastructure.Mongo.Documents
             => new Core.Entities.Route(document.Id, document.UserId, document.AcceptedBy, document.Name, document.Description,
                 document.Difficulty, document.Status, document.Length, 
                 document.Points.Select(p => 
-                    new Point(p.Id, p.Order, p.Latitude, p.Longitude, p.Radius)), document.ActivityKind);
+                    new Point(p.Id, p.Order, p.Latitude, p.Longitude, p.Radius)), document.Latitude, document.Longitude, document.ActivityKind);
 
         public static RouteDocument AsDocument(this Core.Entities.Route entity)
             => new RouteDocument
@@ -32,7 +33,9 @@ namespace Services.Route.Infrastructure.Mongo.Documents
                     Latitude = p.Latitude,
                     Longitude = p.Longitude,
                     Radius = p.Radius
-                })
+                }),
+                Latitude = entity.Latitude,
+                Longitude = entity.Longitude,
             };
 
         public static RouteDto AsDto(this RouteDocument document)
