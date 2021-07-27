@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Convey;
+using Convey.CQRS.Queries;
 using Convey.Logging;
 using Convey.Secrets.Vault;
 using Convey.Types;
@@ -37,7 +38,7 @@ namespace Services.Route.Api
                     .UseDispatcherEndpoints(endpoints => endpoints
                         .Get("", ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppOptions>().Name))
                         .Get<GetRoute, RouteDto>("routes/{routeId}")
-                        .Get<GetRoutes, IEnumerable<RouteDto>>("routes")
+                        .Get<SearchRoutes, PagedResult<RouteDto>>("routes")
                         .Post<CreateRoute>("routes",
                             afterDispatch: (cmd, ctx) => ctx.Response.Created($"routes/{cmd.RouteId}"))
                         .Put<ChangeRouteStatus>("routes/{routeId}/status/{status}",
