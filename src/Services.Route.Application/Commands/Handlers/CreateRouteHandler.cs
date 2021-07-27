@@ -93,9 +93,10 @@ namespace Services.Route.Application.Commands.Handlers
 
                 routeLength += distance;
             }
-            
+
+            var firstPoint = points.ElementAt(0);
             var route = new Core.Entities.Route(command.RouteId, user.Id, null, command.Name, command.Description,
-                difficulty, Status.New, (int)routeLength, points, command.ActivityKind);
+                difficulty, Status.New, (int)routeLength, points,firstPoint.Latitude, firstPoint.Longitude, command.ActivityKind);
 
             await _routeRepository.AddAsync(route);
             await _messageBroker.PublishAsync(new RouteCreated(route.Id, route.Status.ToString()));
