@@ -26,6 +26,7 @@
         <PackageReference Include="Convey.Tracing.Jaeger.RabbitMQ" Version="0.5.452" />
         <PackageReference Include="Convey.WebApi.CQRS" Version="0.5.452" />
         <PackageReference Include="Convey.WebApi.Swagger" Version="0.5.452" />
+        <PackageReference Include="PredicateBuilder" Version="1.0.0" />
     </ItemGroup>
     
     <ItemGroup>
