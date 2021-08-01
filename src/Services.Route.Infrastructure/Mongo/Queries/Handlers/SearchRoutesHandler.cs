@@ -31,13 +31,27 @@ namespace Services.Route.Infrastructure.Mongo.Queries.Handlers
             if (query.ActivityKind.HasValue && query.ActivityKind > 0 && (int)query.ActivityKind <= MaxPossibleActivityKind)
                 predicate = predicate.And(r => r.ActivityKind == query.ActivityKind);
 
-            if (query.TopLeftLatitude.HasValue && query.BottomRightLatitude.HasValue)
+            if (query.OnlyAccepted)
+                predicate = predicate.And(r => r.Status == Status.Accepted);
+
+            if (query.NorthEastLatitude.HasValue && query.NorthEastLongitude.HasValue
+                                                 && query.SouthWestLatitude.HasValue && query.SouthWestLongitude.HasValue)
+            {
+                predicate = predicate.And(r 
+                    => r.Latitude >= query.SouthWestLatitude && r.Latitude <= query.NorthEastLatitude);
+                predicate = predicate.And(r
+                    => r.Longitude >= query.SouthWestLongitude && r.Longitude <= query.NorthEastLongitude);
+            }
+            else if (query.TopLeftLatitude.HasValue && query.BottomRightLatitude.HasValue 
+                && query.TopLeftLongitude.HasValue && query.BottomRightLongitude.HasValue)
+            {
                 predicate = predicate.And(r 
                     => r.Latitude <= query.TopLeftLatitude && r.Latitude >= query.BottomRightLatitude);
 
-            if (query.TopLeftLongitude.HasValue && query.BottomRightLongitude.HasValue)
                 predicate = predicate.And(r
                     => r.Longitude >= query.TopLeftLongitude && r.Longitude <= query.BottomRightLongitude);
+               
+            }
             
             var pagedResult = await _repository.BrowseAsync(predicate, query);
             return pagedResult?.Map(d => d.AsDto());        

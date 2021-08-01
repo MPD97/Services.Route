@@ -17,6 +17,5 @@ namespace Services.Route.Application.Events
             CurrentStatus = currentStatus;
             PreviousStatus = previousStatus;
         }
-        
     }
 }

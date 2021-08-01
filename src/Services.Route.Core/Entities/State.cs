@@ -5,7 +5,6 @@ namespace Services.Route.Core.Entities
         Unknown,
         Valid,
         Incomplete,
-        Suspicious,
         Locked
     }
 }
