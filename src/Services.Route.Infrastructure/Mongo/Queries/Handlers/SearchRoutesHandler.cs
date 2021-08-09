@@ -31,7 +31,9 @@ namespace Services.Route.Infrastructure.Mongo.Queries.Handlers
             if (query.ActivityKind.HasValue && query.ActivityKind > 0 && (int)query.ActivityKind <= MaxPossibleActivityKind)
                 predicate = predicate.And(r => r.ActivityKind == query.ActivityKind);
 
-            if (query.OnlyAccepted)
+            if (query.OnlyNew.HasValue && query.OnlyNew.Value)
+                predicate = predicate.And(r => r.Status == Status.New);
+            else if (query.OnlyAccepted)
                 predicate = predicate.And(r => r.Status == Status.Accepted);
 
             if (query.NorthEastLatitude.HasValue && query.NorthEastLongitude.HasValue
@@ -50,7 +52,6 @@ namespace Services.Route.Infrastructure.Mongo.Queries.Handlers
 
                 predicate = predicate.And(r
                     => r.Longitude >= query.TopLeftLongitude && r.Longitude <= query.BottomRightLongitude);
-               
             }
             
             var pagedResult = await _repository.BrowseAsync(predicate, query);

@@ -9,6 +9,7 @@ namespace Services.Route.Application.Queries
         public Difficulty? Difficulty { get; set; } 
         public ActivityKind? ActivityKind { get; set; }
         public bool OnlyAccepted { get; set; } = true;
+        public bool? OnlyNew { get; set; }
         public decimal? TopLeftLatitude { get; set; }
         public decimal? TopLeftLongitude { get; set; }
         public decimal? BottomRightLatitude { get; set; }

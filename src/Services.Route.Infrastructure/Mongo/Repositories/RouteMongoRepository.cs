@@ -35,8 +35,8 @@ namespace Services.Route.Infrastructure.Mongo.Repositories
             return route?.Single().AsEntity();
         }
 
-        public Task AddAsync(Core.Entities.Route route) => _repository.AddAsync(route.AsDocument());
+        public async Task AddAsync(Core.Entities.Route route) => await _repository.AddAsync(route.AsDocument());
 
-        public Task UpdateAsync(Core.Entities.Route route) => _repository.UpdateAsync(route.AsDocument());
+        public async Task UpdateAsync(Core.Entities.Route route) => await _repository.UpdateAsync(route.AsDocument());
     }
 }
