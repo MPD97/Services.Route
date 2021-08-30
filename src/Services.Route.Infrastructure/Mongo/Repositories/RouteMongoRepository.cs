@@ -16,7 +16,6 @@ namespace Services.Route.Infrastructure.Mongo.Repositories
             _repository = repository;
         }
 
-
         public async Task<Core.Entities.Route> GetAsync(Guid id)
         {
             var route = await _repository.GetAsync(o => o.Id == id);

@@ -9,6 +9,7 @@ namespace Services.Route.Application.DTO
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid? AcceptedBy { get; set; }
+        public Guid? RejectedBy { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Difficulty { get; set; }
@@ -22,12 +23,13 @@ namespace Services.Route.Application.DTO
             
         }
 
-        public RouteDto(Guid id, Guid userId, Guid? acceptedBy, string name, string description, string difficulty,
+        public RouteDto(Guid id, Guid userId, Guid? acceptedBy, Guid? rejectedBy, string name, string description, string difficulty,
             int length, string status, ActivityKind activityKind, IEnumerable<PointDto> points)
         {
             Id = id;
             UserId = userId;
             AcceptedBy = acceptedBy;
+            RejectedBy = rejectedBy;
             Name = name;
             Description = description;
             Difficulty = difficulty;

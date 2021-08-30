@@ -9,11 +9,12 @@ namespace Services.Route.Core.Entities
 {
     public class Route: AggregateRoot
     {
-        private static readonly int MaxPossibleValue = Enum.GetValues(typeof(ActivityKind)).Cast<int>().Sum();
+        private static readonly int MaxPossibleActivityKindValue = Enum.GetValues(typeof(ActivityKind)).Cast<int>().Sum();
         
         private ISet<Point> _points = new HashSet<Point>();
         public Guid UserId { get; private set; }
         public Guid? AcceptedById { get; private set; }
+        public Guid? RejcetedById { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public Difficulty Difficulty { get; private set; }
@@ -28,12 +29,24 @@ namespace Services.Route.Core.Entities
         public decimal Latitude { get; private set; }
         public decimal Longitude { get; private set; }
 
-        public Route(Guid id, Guid userId, Guid? acceptedById, string name, string description, Difficulty difficulty, 
-             Status status, int length, IEnumerable<Point> points, decimal latitude, decimal longitude)
+        
+        public Route(Guid id, Guid userId, Guid? acceptedById, Guid? rejcetedById, string name, string description, Difficulty difficulty, 
+            Status status, int length, List<Point> points, params ActivityKind[] activityKinds)
+            : this(id, userId, acceptedById, rejcetedById, name, description, difficulty, status, length, points)
         {
+            AddActivityKind(activityKinds);
+        }
+        
+        public Route(Guid id, Guid userId, Guid? acceptedById, Guid? rejcetedById, string name, string description, Difficulty difficulty, 
+             Status status, int length, List<Point> points)
+        {
+            if (points.Count == 0)
+                throw new InvalidRoutePointsCountException();              
+            
             Id = id;
             UserId = userId;
             AcceptedById = acceptedById;
+            RejcetedById = rejcetedById;
             Name = IsValidName(name) ? name : throw new InvalidRouteNameException(name);
             Description = IsValidDescription(description)
                 ? description
@@ -42,21 +55,48 @@ namespace Services.Route.Core.Entities
             Status = status;
             Length = length;
             Points = points;
-            Latitude = IsValidLatitude(latitude) ? latitude : throw new InvalidLatitudeException(latitude);
-            Longitude = IsValidLongitude(longitude) ? longitude : throw new InvalidLongitudeException(longitude);
+            Latitude = points[0].Latitude;
+            Longitude = points[0].Longitude;
         }
-        
-        public Route(Guid id, Guid userId, Guid? acceptedById, string name, string description, Difficulty difficulty, 
-             Status status, int length, IEnumerable<Point> points, decimal latitude, decimal longitude, params ActivityKind[] activityKinds)
-        : this(id, userId, acceptedById, name, description, difficulty, status, length, points, latitude, longitude)
+        private static bool IsValidName(string name)
         {
-            AddActivityKind(activityKinds);
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            const int maxLength = 100;
+            const int minLength = 6;
+            return name.Length switch
+            {
+                > maxLength => throw new RouteNameTooLongException(name, maxLength),
+                < minLength => throw new RouteNameTooShortException(name, minLength),
+                _ => true
+            };
+        }
+        private static bool IsValidDescription(string description)
+        {
+            if (string.IsNullOrEmpty(description))
+                return true;
+
+            if (description.All(char.IsWhiteSpace))
+                return false;
+
+            const int maxLength = 1024;
+            if (description.Length > maxLength)
+                throw new RouteDescriptionTooLongException(description, maxLength);
+
+            return true;
         }
         
-        public static bool IsValidLatitude(decimal latitude)
-            => latitude is >= -90m and <= 90m;
-        public static bool IsValidLongitude(decimal longitude)
-            => longitude is >= -180m and <= 180m;
+        public static Route Create(Guid id, Guid userId, string name, string description,
+            Difficulty difficulty, int length, List<Point> points,
+            params ActivityKind[] activityKinds)
+        {
+            var route = new Route(id, userId, null, null, name, description, difficulty, Status.New, length,
+                points, activityKinds);
+            
+            route.AddEvent(new RouteCreated(route));
+            return route;
+        }
         
         public void Accept(Guid userId)
         {
@@ -73,15 +113,16 @@ namespace Services.Route.Core.Entities
             if (Status != Status.New)
                 throw new CannotRejectRouteWithThisStatusException(Status, Status.New);
             
+            RejcetedById = userId;
             SetStatus(Status.Rejected);
         }
         
-        public void Remove(Guid userId)
+        public void Remove()
         {
             if (Status != Status.Accepted)
                 throw new CannotRemoveRouteWithThisStatusException(Status, Status.Accepted);
             
-            SetStatus(Status.Rejected);
+            SetStatus(Status.Removed);
         }
         
         private void SetStatus(Status status)
@@ -91,55 +132,28 @@ namespace Services.Route.Core.Entities
             AddEvent(new RouteStatusChanged(this, previousStatus));
         }
         
-        private static bool IsValidName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new InvalidRouteNameException(name);
-
-            const int maxLength = 100;
-            const int minLength = 6;
-            return name.Length switch
-            {
-                > maxLength => throw new RouteNameTooLongException(name, maxLength),
-                < minLength => throw new RouteNameTooShortException(name, minLength),
-                _ => true
-            };
-        }
-        
-        private static bool IsValidDescription(string description)
-        {
-            if (string.IsNullOrWhiteSpace(description))
-                return true;
-
-            const int maxLength = 1024;
-            if (description.Length > maxLength)
-                throw new RouteDescriptionTooLongException(description, maxLength);
-
-            return true;
-        }
-        
-        public void ChangeActivityKind(ActivityKind kind)
+        private void ChangeActivityKind(ActivityKind kind)
             => ActivityKind = kind;
 
-        public void AddActivityKind(params ActivityKind[] kinds)
+        private void AddActivityKind(params ActivityKind[] kinds)
         {
             foreach (var kind in kinds)
             {
-                if ((int)kind > MaxPossibleValue || (int)kind < 0)
+                if ((int)kind > MaxPossibleActivityKindValue || (int)kind < 0)
                 {
-                    throw new InvalidRouteActivityKindException((int) kind, 0, MaxPossibleValue);
+                    throw new InvalidRouteActivityKindException((int) kind, 0, MaxPossibleActivityKindValue);
                 }
                 ActivityKind |= kind;
             }
         }
         
-        public void RemoveActivityKind(params ActivityKind[] kinds)
+        private void RemoveActivityKind(params ActivityKind[] kinds)
         {
             foreach (var kind in kinds)
             {
-                if ((int)kind > MaxPossibleValue || (int)kind < 0)
+                if ((int)kind > MaxPossibleActivityKindValue || (int)kind < 0)
                 {
-                    throw new InvalidRouteActivityKindException((int) kind, 0, MaxPossibleValue);
+                    throw new InvalidRouteActivityKindException((int) kind, 0, MaxPossibleActivityKindValue);
                 }
                 ActivityKind &= ~kind;
             }

@@ -10,6 +10,7 @@ namespace Services.Route.Infrastructure.Mongo.Documents
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid? AcceptedBy { get; set; }
+        public Guid? RejectedBy { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Difficulty Difficulty { get; set; }
