@@ -25,6 +25,7 @@ namespace Services.Route.Api
             => await CreateWebHostBuilder(args)
                 .Build()
                 .RunAsync();
+
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
             => WebHost.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services
@@ -43,7 +44,6 @@ namespace Services.Route.Api
                             afterDispatch: (cmd, ctx) => ctx.Response.Created($"routes/{cmd.RouteId}"))
                         .Put<ChangeRouteStatus>("routes/{routeId}/status/{status}",
                             afterDispatch: (cmd, ctx) => ctx.Response.NoContent())))
-                .UseLogging()
-                .UseVault();
+                .UseLogging();
     }
 }

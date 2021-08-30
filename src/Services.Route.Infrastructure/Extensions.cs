@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Convey;
-using Convey.CQRS.Commands;
-using Convey.CQRS.Events;
 using Convey.CQRS.Queries;
 using Convey.Discovery.Consul;
 using Convey.Docs.Swagger;
@@ -34,13 +33,12 @@ using Services.Route.Application.Events.External;
 using Services.Route.Application.Services;
 using Services.Route.Core.Repositories;
 using Services.Route.Infrastructure.Contexts;
-using Services.Route.Infrastructure.Decorators;
 using Services.Route.Infrastructure.Exceptions;
 using Services.Route.Infrastructure.Logging;
 using Services.Route.Infrastructure.Mongo.Documents;
 using Services.Route.Infrastructure.Mongo.Repositories;
 using Services.Route.Infrastructure.Services;
-
+[assembly: InternalsVisibleTo("Services.Route.Tests.Unit")]
 namespace Services.Route.Infrastructure
 {
     public static class Extensions
@@ -55,9 +53,7 @@ namespace Services.Route.Infrastructure
             builder.Services.AddSingleton<IDistanceMeasure, DistanceMesure>();
             builder.Services.AddTransient<IAppContextFactory, AppContextFactory>();
             builder.Services.AddTransient(ctx => ctx.GetRequiredService<IAppContextFactory>().Create());
-            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
-            builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
-            
+
             return builder
                 .AddErrorHandler<ExceptionToResponseMapper>()
                 .AddQueryHandlers()
@@ -70,13 +66,11 @@ namespace Services.Route.Infrastructure
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 .AddMongo()
                 .AddRedis()
-                .AddMetrics()
                 .AddJaeger()
                 .AddHandlersLogging()
                 .AddMongoRepository<UserDocument, Guid>("users")
                 .AddMongoRepository<RouteDocument, Guid>("routes")
-                .AddWebApiSwaggerDocs()
-                .AddSecurity();
+                .AddWebApiSwaggerDocs();
         }
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
@@ -86,7 +80,6 @@ namespace Services.Route.Infrastructure
                 .UseJaeger()
                 .UseConvey()
                 .UsePublicContracts<ContractAttribute>()
-                .UseMetrics()
                 .UseRabbitMq()
                 .SubscribeCommand<CreateRoute>()
                 .SubscribeCommand<ChangeRouteStatus>()

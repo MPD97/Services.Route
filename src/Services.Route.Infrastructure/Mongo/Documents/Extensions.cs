@@ -9,10 +9,10 @@ namespace Services.Route.Infrastructure.Mongo.Documents
     public static class Extensions
     {
         public static Core.Entities.Route AsEntity(this RouteDocument document)
-            => new Core.Entities.Route(document.Id, document.UserId, document.AcceptedBy, document.Name, document.Description,
+            => new Core.Entities.Route(document.Id, document.UserId, document.AcceptedBy, document.RejectedBy, document.Name, document.Description,
                 document.Difficulty, document.Status, document.Length, 
                 document.Points.Select(p => 
-                    new Point(p.Id, p.Order, p.Latitude, p.Longitude, p.Radius)), document.Latitude, document.Longitude, document.ActivityKind);
+                    new Point(p.Id, p.Order, p.Latitude, p.Longitude, p.Radius)).ToList(), document.ActivityKind);
 
         public static RouteDocument AsDocument(this Core.Entities.Route entity)
             => new RouteDocument
@@ -20,6 +20,7 @@ namespace Services.Route.Infrastructure.Mongo.Documents
                 Id = entity.Id,
                 UserId = entity.UserId,
                 AcceptedBy = entity.AcceptedById,
+                RejectedBy = entity.RejcetedById,
                 Name = entity.Name,
                 Description = entity.Description,
                 Difficulty = entity.Difficulty,
@@ -44,6 +45,7 @@ namespace Services.Route.Infrastructure.Mongo.Documents
                 Id = document.Id,
                 UserId = document.UserId,
                 AcceptedBy = document.AcceptedBy,
+                RejectedBy = document.RejectedBy,
                 Name = document.Name,
                 Description = document.Description,
                 Difficulty = document.Difficulty.ToString(),
