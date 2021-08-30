@@ -7,16 +7,24 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.9" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
         <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="NSubstitute" Version="4.2.2" />
+        <PackageReference Include="Shouldly" Version="4.0.3" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="coverlet.collector" Version="3.0.2">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Services.Route.Api\Services.Route.Api.csproj" />
+        <ProjectReference Include="..\..\src\Services.Route.Application\Services.Route.Application.csproj" />
+        <ProjectReference Include="..\..\src\Services.Route.Core\Services.Route.Core.csproj" />
+        <ProjectReference Include="..\..\src\Services.Route.Infrastructure\Services.Route.Infrastructure.csproj" />
+        <ProjectReference Include="..\Services.Route.Tests.Shared\Services.Route.Tests.Shared.csproj" />
     </ItemGroup>
 
 </Project>
