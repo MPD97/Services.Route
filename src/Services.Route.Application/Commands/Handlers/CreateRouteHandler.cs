@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
-using Services.Route.Application.Events;
 using Services.Route.Application.Exceptions;
 using Services.Route.Application.Services;
 using Services.Route.Core.Entities;
@@ -17,15 +16,17 @@ namespace Services.Route.Application.Commands.Handlers
         private readonly IRouteRepository _routeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
         private readonly IDistanceMeasure _distanceMeasure;
 
         public CreateRouteHandler(IRouteRepository routeRepository, IUserRepository userRepository,
-             IMessageBroker messageBroker, IDistanceMeasure distanceMeasure)
+             IMessageBroker messageBroker, IDistanceMeasure distanceMeasure, IEventMapper eventMapper)
         {
             _routeRepository = routeRepository;
             _userRepository = userRepository;
             _messageBroker = messageBroker;
             _distanceMeasure = distanceMeasure;
+            _eventMapper = eventMapper;
         }
 
         public async Task HandleAsync(CreateRoute command)
@@ -95,11 +96,13 @@ namespace Services.Route.Application.Commands.Handlers
             }
 
             var firstPoint = points.ElementAt(0);
-            var route = new Core.Entities.Route(command.RouteId, user.Id, null, command.Name, command.Description,
-                difficulty, Status.New, (int)routeLength, points,firstPoint.Latitude, firstPoint.Longitude, command.ActivityKind);
+            var route = Core.Entities.Route.Create(command.RouteId, user.Id, command.Name, command.Description,
+                difficulty, (int)routeLength, points.ToList(), command.ActivityKind);
 
             await _routeRepository.AddAsync(route);
-            await _messageBroker.PublishAsync(new RouteCreated(route.Id, route.Status.ToString()));
+            
+            var events = _eventMapper.MapAll(route.Events);
+            await _messageBroker.PublishAsync(events.ToArray());
         }
     }
 }

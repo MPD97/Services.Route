@@ -56,7 +56,7 @@ namespace Services.Route.Application.Commands.Handlers
                     break;
                 
                 case Status.Removed: 
-                    route.Remove(identity.Id);
+                    route.Remove();
                     break;
                 
                 case Status.Unknown:
