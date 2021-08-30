@@ -25,7 +25,7 @@ namespace Services.Route.Core.ValueObjects
         public static bool IsValidLongitude(decimal longitude)
             => longitude is >= -180m and <= 180m;
         public static bool IsValidRadius(int radius)
-            => radius is >= 0 and <= 100;
+            => radius is >= 10 and <= 100;
         
         public bool Equals(Point other)
         {

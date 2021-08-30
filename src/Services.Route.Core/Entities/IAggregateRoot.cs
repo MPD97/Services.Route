@@ -6,7 +6,5 @@ namespace Services.Route.Core.Entities
     {
         IEnumerable<IDomainEvent> Events { get; }
         AggregateId Id { get;  }
-        int Version { get; }
-        void IncrementVersion();
     }
 }
